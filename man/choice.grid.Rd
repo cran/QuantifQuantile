@@ -1,0 +1,56 @@
+\name{choice.grid}
+\alias{choice.grid}
+\title{Choice of the quantization grids}
+\usage{
+choice.grid(X, N, B, tildeB, p = 2)
+}
+\arguments{
+  \item{X}{vector or matrix that we want to quantize.}
+
+  \item{N}{size of the quantization grids.}
+
+  \item{p}{L_p norm optimal quantization.}
+
+  \item{B}{number of bootstrap replications needed for the
+  bootstrap estimator.}
+
+  \item{tildeB}{number of bootstrap replications needed for
+  the choice of \code{N}.}
+}
+\value{
+An array of dimension
+\code{d}*\code{N}*(\code{B}+\code{tildeB}) that corresponds
+to \code{B}+\code{tildeB} quantization grids.
+}
+\description{
+This function provides \code{B+tildeB} optimal quantization
+grids for \code{X}, with \code{N} fixed.
+}
+\details{
+This function works for any dimension of \code{X}. If the
+covariable is univariate, \code{X} is a vector while
+\code{X} is a matrix with \code{d} rows when the covariable
+is \code{d}-dimensional.
+}
+\examples{
+X <- runif(300,-2,2)
+N <- 10
+B <- 20
+tildeB <- 10
+choice.grid(X,N,B,tildeB)
+}
+\references{
+Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
+\emph{Numerical study of a conditional quantile estimator
+based on optimal quantization}, Manuscript in preparation
+
+Pages, G. (1998) \emph{A space quantization method for
+numerical integration}, Journal of Computational and
+Applied Mathematics, 89(1), 1-38
+}
+\seealso{
+\code{\link{QuantifQuantile}},
+\code{\link{QuantifQuantile.d2}} and
+\code{\link{QuantifQuantile.d}}
+}
+

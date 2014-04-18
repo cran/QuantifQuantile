@@ -1,0 +1,116 @@
+\name{QuantifQuantile}
+\alias{QuantifQuantile}
+\title{QuantifQuantile for X univariate}
+\usage{
+QuantifQuantile(X, Y, alpha = c(0.05, 0.25, 0.5, 0.75, 0.95),
+  x = seq(min(X), max(X), length = 100), testN = c(35, 40, 45, 50, 55),
+  p = 2, B = 50, tildeB = 20)
+}
+\arguments{
+  \item{X}{vector of covariables.}
+
+  \item{Y}{vector of response variables.}
+
+  \item{alpha}{vector of order of the quantiles.}
+
+  \item{x}{vector of values for \code{x} in q_alpha(x).}
+
+  \item{testN}{grid of values of \code{N} that will be
+  tested.}
+
+  \item{p}{L_p norm optimal quantization.}
+
+  \item{B}{number of bootstrap replications for the
+  bootstrap estimator.}
+
+  \item{tildeB}{number of bootstrap replications for the
+  choice of \code{N}.}
+}
+\value{
+An object of class \code{QuantifQuantile} which is a list
+with the following components:
+
+\item{hatq_opt}{A matrix containing the estimated
+conditional quantiles. The number of rows is the number of
+considered values for \code{X} and the number of columns
+the size of the order vector \code{alpha}.}
+
+\item{N_opt}{The optimal selected value for \code{N}.}
+
+\item{hatMSEmean_N}{The vector of estimated MSE provided by
+our selection criterion for \code{N} (after taking the mean
+according to \code{alpha}). Its size is
+\code{length(testN)}. The optimal value \code{N_opt}
+minimizes this vector.}
+
+\item{hatMSE_N}{The matrix of estimated MSE provided by our
+selection criterion for \code{N} before taking the mean
+according to \code{alpha}. The number of columns is then
+\code{length(testN)} and the number of rows
+\code{length(alpha)}.}
+
+\item{hatq_N}{A 3-dimensional array containing the
+estimated conditional quantiles for each considered value
+for \code{N}.}
+
+\item{X}{The vector of covariables.}
+
+\item{Y}{The vector of response variables.}
+
+\item{x}{The considered vector of values for x in
+q_alpha(x).}
+
+\item{alpha}{The considered vector of order for the
+quantiles.}
+
+\item{testN}{The considered grid of values for \code{N}
+that were tested.}
+}
+\description{
+Estimation of conditional quantiles using optimal
+quantization when \code{X} is univariate.
+}
+\details{
+\itemize{\item This function calculates estimated
+conditional quantiles with a method based on optimal
+quantization when the covariable is unvariate. For
+multivariate covariable, see
+\code{\link{QuantifQuantile.d2}} or
+\code{\link{QuantifQuantile.d}}. \item The criterion for
+selecting the number of quantizers is implemented in this
+function. The user has to choose a grid \code{testN} of
+possible values in which \code{N} will be selected. It
+actually minimizes some bootstrap estimated version of the
+MSE (Mean Squared Error). The function
+\code{\link{plot.select.N.QuantifQuantile}} illustrates it.
+If the graph is not globally convex, the arguments
+\code{testN} should be adapted.}
+}
+\examples{
+set.seed(644936)
+n <- 300
+X <- runif(300,-2,2)
+Y <- X^2+rnorm(n)
+res <- QuantifQuantile(X,Y,testN=seq(10,30,by=5))
+}
+\references{
+Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
+\emph{Conditional quantiles estimation through optimal
+quantization}, Manuscript in preparation
+
+Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
+\emph{Numerical study of a conditional quantile estimator
+based on optimal quantization}, Manuscript in preparation
+}
+\seealso{
+\code{\link{QuantifQuantile.d2}} and
+\code{\link{QuantifQuantile.d}} for multivariate versions.
+
+\code{\link{plot.select.N.QuantifQuantile}} for the
+\code{N} selection criterion.
+
+\code{\link{plot.QuantifQuantile}},
+\code{\link{print.QuantifQuantile}},
+\code{\link{summary.QuantifQuantile}}
+}
+
