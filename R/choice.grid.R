@@ -12,14 +12,14 @@
 #'  corresponds to \code{B}+\code{tildeB} quantization grids.
 #' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and 
 #' \code{\link{QuantifQuantile.d}}
-#' @details This function works for any dimension of \code{X}. If the covariable
+#' @details This function works for any dimension of \code{X}. If the covariate
 #'  is univariate, \code{X} is a vector while \code{X} is a matrix with \code{d}
-#'  rows when the covariable is \code{d}-dimensional.
+#'  rows when the covariate is \code{d}-dimensional.
 #' @details These grids are constructed using a stochastic gradient algorithm,
 #' called CLVQ when \code{p}=2.
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 #' \emph{Numerical study of a conditional quantile estimator based on optimal 
-#' quantization}, Manuscript in preparation
+#' quantization}, Manuscript in preparation.
 #' @references Pages, G. (1998) \emph{A space quantization method for numerical 
 #' integration}, Journal of Computational and Applied Mathematics, 89(1), 1-38
 #' @examples
@@ -75,6 +75,7 @@ choice.grid <- function(X, N, B, tildeB, p = 2) {
                 1))
         }
         gamma0X <- distortion
+        if(any(gamma0X < 0.005)){gamma0X[gamma0X<0.005] <- 1}
         gammaX = array(0, dim = c(B + tildeB, n + 1))
         for (i in 1:(B + tildeB)) {
             # calculation of the step parameter
@@ -133,6 +134,8 @@ choice.grid <- function(X, N, B, tildeB, p = 2) {
                 1))
         }
         gamma0X <- BtestX
+        if(any(gamma0X < 0.005)){gamma0X[gamma0X<0.005] <- 1}
+        
         gammaX <- array(0, dim = c(B + tildeB, n + 1))
         for (i in 1:(B + tildeB)) {
             # calculation of the step parameter
@@ -146,23 +149,23 @@ choice.grid <- function(X, N, B, tildeB, p = 2) {
         for (i in 1:n) {
             for (j in 1:(B + tildeB)) {
                 tildeX[, , j] <- matrix(rep(primeX[, i, j], N), 
-                  nrow = N, byrow = TRUE)
+                  nrow = N, byrow = FALSE)
             }
             Ax <- sqrt(apply((tildeX - hatX)^2, c(2, 3), sum))
             # calculation of each distance to determine the point of the grid 
             #the closer of the stimuli
             iminX[i, ] <- apply(Ax, 2, which.min)
-            mX <- array(0, dim = c(d, (B + tildeB), 3))
             for (k in 1:d) {
-                mX[k, , ] <- matrix(c(rep(k, (B + tildeB)), iminX[i, 
+                m <- matrix(c(rep(k, (B + tildeB)), iminX[i, 
                   ], c(1:(B + tildeB))), ncol = 3)
-                hatX[mX[k, , ]] = hatX[mX[k, , ]] - gammaX[, 
-                  i + 1] * (hatX[mX[k, , ]] - primeX[k, i, ]) * 
-                  (sqrt(sum((hatX[mX[k, , ]] - primeX[k, i, ])^2)))^(p - 
-                    1)/sqrt(sum((hatX[mX[k, , ]] - primeX[k, 
+                hatX[m] = hatX[m] - gammaX[, 
+                  i + 1] * (hatX[m] - primeX[k, i, ]) * 
+                  (sqrt(sum((hatX[m] - primeX[k, i, ])^2)))^(p - 
+                    1)/sqrt(sum((hatX[m] - primeX[k, 
                   i, ])^2))
             }
         }
     }
-    hatX
+    output <- list(init_grid=hatX0,opti_grid=hatX)
+    output
 } 

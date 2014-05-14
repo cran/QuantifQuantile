@@ -1,5 +1,5 @@
 #' @export plot.select.N.QuantifQuantile
-#' @title Plot of estimated MSE as a funcion of N
+#' @title Plot of estimated MSE as a function of N
 #' @name plot.select.N.QuantifQuantile
 #' @description This function illustrates our data driven selection criterion 
 #' for \code{N}. It provides the plot of the bootstrap estimated values of MSE(N)
@@ -15,10 +15,10 @@
 
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 #' \emph{Conditional quantiles estimation through optimal quantization}, 
-#' Manuscript in preparation
+#' Submitted.
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 #' \emph{Numerical study of a conditional quantile estimator based on optimal 
-#' quantization}, Manuscript in preparation
+#' quantization}, Manuscript in preparation.
 
 #' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and 
 #' \code{\link{QuantifQuantile.d}}
@@ -49,7 +49,31 @@
 plot.select.N <- function(x, type = "l", ...) UseMethod("plot.select.N")
 
 plot.select.N.QuantifQuantile <- function(x, type = "l", ...) {
-    plot(x$testN, x$hatMSEmean_N, type = type)
-    abline(v = x$N_opt, col = 2)
+    if(length(x$N_opt)==1){
+      hatMSEmean_N <- apply(x$hatMSE_N, 2, mean)
+      plot(x$testN, hatMSEmean_N, type = type)
+      abline(v = x$N_opt, col = 2)
+    }else{
+      plot(x$testN, x$hatMSE_N[1,], type = type, ylim = c(min(x$hatMSE_N),
+           max(x$hatMSE_N)),col=1,lty=1)
+      j=which(x$N_opt[1]==x$testN)
+      lines(c(x$N_opt[1],x$N_opt[1]),c(-1,x$hatMSE_N[1,j]),
+            col=2)
+      if(type=="l"){
+        for(i in 1:length(x$alpha)){
+          lines(x$testN, x$hatMSE_N[i,], type = type,col=1,lty=i,lwd=1)
+          j=which(x$N_opt[i]==x$testN)
+          lines(c(x$N_opt[i],x$N_opt[i]),c(-1,x$hatMSE_N[i,j]),
+                col=2)
+        }
+      }else{
+        for(i in 1:length(x$alpha)){
+          points(x$testN, x$hatMSE_N[i,], type = type, col=1)
+          j=which(x$N_opt[i]==x$testN)
+          lines(c(x$N_opt[i],x$N_opt[i]),c(-1,x$hatMSE_N[i,j]),
+                col=2)
+        }
+      }
+    }
 }
  

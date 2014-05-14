@@ -8,10 +8,10 @@
 ##' @param \dots Not used.
 ##' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 ##' \emph{Conditional quantiles estimation through optimal quantization}, 
-##' Manuscript in preparation
+##' Submitted.
 ##' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 ##' \emph{Numerical study of a conditional quantile estimator based on optimal 
-##' quantization}, Manuscript in preparation
+##' quantization}, Manuscript in preparation.
 
 ##' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and
 ##'  \code{\link{QuantifQuantile.d}}
@@ -32,7 +32,7 @@
 print.QuantifQuantile <- function(x, ...) {
     stopifnot(class(x)=="QuantifQuantile")
     cat(paste("** QuantifQuantile results **", 
-        "The result object is a list of length 10.", 
+        "The result object is a list of length 9.", 
         "Most interesting components are the following:\n\n", 
         sep = "\n"))
     
@@ -42,8 +42,8 @@ print.QuantifQuantile <- function(x, ...) {
                   "optimal value for N selected among testN by our criterion")
     res[2, ] <- c("$hatq_opt", 
                   "the estimated conditional quantiles obtained with N_opt")
-    res[3, ] <- c("$hatMSEmean_N", 
-                  "estimated MSE as a function of N; the minimal entry corresponds to N_opt ")
+    res[3, ] <- c("$hatMSE_N", 
+                  "estimated MSE as a function of N")
     
     print(res)
     

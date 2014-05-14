@@ -17,10 +17,10 @@
 
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 #' \emph{Conditional quantiles estimation through optimal quantization}, 
-#' Manuscript in preparation
+#' Submitted.
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 #' \emph{Numerical study of a conditional quantile estimator based on optimal 
-#' quantization}, Manuscript in preparation
+#' quantization}, Submitted.
 
 #' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and
 #'\code{\link{QuantifQuantile.d}}
@@ -73,13 +73,13 @@ plot.QuantifQuantile <- function(x, col.plot = c(1:(length(x$alpha) +
         plot(x$X, x$Y, col = col.plot[1], cex = 0.7, ...)
         if (length(x$x) > 1) {
             for (j in 1:length(x$alpha)) {
-                lines(x$x, x$hatq_opt[, j], col = col.plot[j + 
+                lines(x$x, x$hatq_opt[j, ], col = col.plot[j + 
                   1])
             }
         }
         if (length(x$x) == 1) {
             for (j in 1:length(x$alpha)) {
-                points(x$x, x$hatq_opt[, j], col = col.plot[j + 
+                points(x$x, x$hatq_opt[j, ], col = col.plot[j + 
                   1], pch = 20, cex = 1)
             }
         }
@@ -90,13 +90,13 @@ plot.QuantifQuantile <- function(x, col.plot = c(1:(length(x$alpha) +
             plot(x$X, x$Y, col = col.plot[1], cex = 0.7, ...)
             if (length(x$x) > 1) {
                 for (j in 1:length(x$alpha)) {
-                  lines(x$x, x$hatq_opt[, j], col = col.plot[j + 
+                  lines(x$x, x$hatq_opt[ j,], col = col.plot[j + 
                     1])
                 }
             }
             if (length(x$x) == 1) {
                 for (j in 1:length(x$alpha)) {
-                  points(x$x, x$hatq_opt[, j], col = col.plot[j + 
+                  points(x$x, x$hatq_opt[ j, ], col = col.plot[j + 
                     1], pch = 20, cex = 1)
                 }
             }
@@ -106,7 +106,7 @@ plot.QuantifQuantile <- function(x, col.plot = c(1:(length(x$alpha) +
           hatq_matrix <- array(0, dim = c(sqrt(dim(x$x)[2]), sqrt(dim(x$x)[2]), 
                                           length(x$alpha)))
           for (i in 1:length(x$alpha)) {
-            hatq_matrix[, , i] <- matrix(x$hatq_opt[, i], ncol = dim(x$x)[2])
+            hatq_matrix[, , i] <- matrix(x$hatq_opt[ i,], ncol = dim(x$x)[2])
           }
           if (length(x$x)/d > 1) {
             for (j in 1:length(x$alpha)) {

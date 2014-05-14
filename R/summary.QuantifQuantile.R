@@ -13,10 +13,10 @@
 #'
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 #' \emph{Conditional quantiles estimation through optimal quantization}, 
-#' Manuscript in preparation
+#' Submitted
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
 #' \emph{Numerical study of a conditional quantile estimator based on optimal 
-#' quantization}, Manuscript in preparation
+#' quantization}, Manuscript in preparation.
 #' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and 
 #' \code{\link{QuantifQuantile.d}}
 #' @seealso \code{\link{plot.QuantifQuantile}}, \code{\link{print.QuantifQuantile}}
@@ -37,13 +37,21 @@
 #' @export summary.QuantifQuantile
 summary.QuantifQuantile <- function(object, ...) {
   stopifnot(class(object)=="QuantifQuantile")
-  cat(paste("** Resulting estimated conditional quantiles with N_opt=",object$N_opt," **"),fill=TRUE)
+  if(length(object$N_opt)==1){
+    cat(paste("** Resulting estimated conditional quantiles with N_opt=",object$N_opt," **"),fill=TRUE)
+  }else{
+    cat(paste("** Resulting estimated conditional quantiles with N_opt depending on alpha"," **"),fill=TRUE)
+    cat(paste("** N_opt="),paste(object$N_opt),paste("**"),fill=TRUE)
+  }
+  
   if(is.vector(object$X)){
     cat(paste("For each x, the corresponding estimated q_alpha(x) for each alpha\n"))
-    result <- array(c(object$x,object$hatq_opt),dim=c(length(object$x),length(object$alpha)+1),dimnames=list(1:length(object$x),c("x",object$alpha)))
+    result <- array(c(object$x,t(object$hatq_opt)),dim=c(length(object$x),length(object$alpha)+1),dimnames=list(1:length(object$x),c("x",object$alpha)))
+    result <- t(result)
   }else{
     cat(paste("For each x (one component by column), the corresponding estimated q_alpha(x) for each alpha\n"))
-    result <- array(c(object$x,object$hatq_opt),dim=c(ncol(object$x),length(object$alpha)+nrow(object$x)),dimnames=list(1:ncol(object$x),c(rep("x",nrow(object$x)),object$alpha)))
-    print(result)
+    result <- array(c(t(object$x),t(object$hatq_opt)),dim=c(ncol(object$x),length(object$alpha)+nrow(object$x)),dimnames=list(1:ncol(object$x),c(rep("x",nrow(object$x)),object$alpha)))  
+    result <- t(result)
   }
+  print(result)
 } 
