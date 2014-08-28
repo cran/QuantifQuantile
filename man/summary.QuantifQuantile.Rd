@@ -14,7 +14,7 @@ of the
 \item{\dots}{Not used.}
 }
 \description{
-This function display a summary of QuantifQuantile results.
+This function displays a summary of QuantifQuantile results.
 }
 \details{
 This function prints the estimated conditional quantiles q_alpha(x) for each
@@ -32,13 +32,13 @@ summary(res)
 Isabelle Charlier, Davy Paindaveine, Jerome Saracco
 }
 \references{
-Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-\emph{Conditional quantiles estimation through optimal quantization},
-Submitted
+Charlier, I. and Paindaveine, D. and Saracco, J.,
+\emph{Conditional quantile estimation through optimal quantization},
+Journal of Statistical Planning and Inference, to appear.
 
-Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-\emph{Numerical study of a conditional quantile estimator based on optimal
-quantization}, Manuscript in preparation.
+Charlier, I. and Paindaveine, D. and Saracco, J.,
+\emph{Conditional quantile estimator based on optimal
+quantization: from theory to practice}, Submitted.
 }
 \seealso{
 \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and

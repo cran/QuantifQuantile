@@ -6,7 +6,7 @@
 #' \code{\link{QuantifQuantile}} or \code{\link{QuantifQuantile.d2}}.
 #' @param col.plot Vector of size \code{length(x$alpha)+1}. The first entry 
 #' corresponds to the color of the data points while the other colors are for 
-#' the conditional quantiles curves or points.
+#' the conditional quantiles curves, points or surfaces.
 #' @param \dots Arguments to be passed to \code{\link{par}}.
 #' 
 #' @details If \code{X} is univariate, the graph is two-dimensional and if 
@@ -15,12 +15,12 @@
 #' conditional quantiles are plotted as points. When \code{x} is a grid of 
 #' values, they are plotted as curves if \code{d}=1 and surfaces if \code{d}=2.
 
-#' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-#' \emph{Conditional quantiles estimation through optimal quantization}, 
-#' Submitted.
-#' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-#' \emph{Numerical study of a conditional quantile estimator based on optimal 
-#' quantization}, Submitted.
+#' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
+#' \emph{Conditional quantile estimation through optimal quantization}, 
+#' Journal of Statistical Planning and Inference, to appear.
+#' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
+#' \emph{Conditional quantile estimator based on optimal 
+#' quantization: from theory to practice}, Submitted.
 
 #' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and
 #'\code{\link{QuantifQuantile.d}}
@@ -59,11 +59,12 @@
 #' Y<-apply(X^2,2,sum)+rnorm(n)
 #' res <- QuantifQuantile.d2(X,Y,testN=seq(80,150,by=10),x=as.matrix(c(1,0)),
 #' B=30,tildeB=20)
+#' plot(res)
 #' }
 #' 
 #' @import rgl
 #' @method plot QuantifQuantile
-#' @S3method plot QuantifQuantile
+# @S3method plot QuantifQuantile
 
 plot.QuantifQuantile <- function(x, col.plot = c(1:(length(x$alpha) + 
     1)), ...) {

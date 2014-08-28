@@ -1,6 +1,6 @@
 #' Summary of QuantifQuantile results
 #' 
-#' This function display a summary of QuantifQuantile results.
+#' This function displays a summary of QuantifQuantile results.
 #' 
 #' This function prints the estimated conditional quantiles q_alpha(x) for each 
 #' \code{x} and \code{alpha} considered, as an array.
@@ -11,12 +11,12 @@
 #' \code{\link{QuantifQuantile.d}} functions.
 #' @param \dots Not used.
 #'
-#' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-#' \emph{Conditional quantiles estimation through optimal quantization}, 
-#' Submitted
-#' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-#' \emph{Numerical study of a conditional quantile estimator based on optimal 
-#' quantization}, Manuscript in preparation.
+#' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
+#' \emph{Conditional quantile estimation through optimal quantization}, 
+#' Journal of Statistical Planning and Inference, to appear.
+#' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
+#' \emph{Conditional quantile estimator based on optimal 
+#' quantization: from theory to practice}, Submitted.
 #' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and 
 #' \code{\link{QuantifQuantile.d}}
 #' @seealso \code{\link{plot.QuantifQuantile}}, \code{\link{print.QuantifQuantile}}
@@ -33,7 +33,7 @@
 #' 
 #'
 #' @method summary QuantifQuantile
-#' @S3method summary QuantifQuantile
+# @S3method summary QuantifQuantile
 #' @export summary.QuantifQuantile
 summary.QuantifQuantile <- function(object, ...) {
   stopifnot(class(object)=="QuantifQuantile")

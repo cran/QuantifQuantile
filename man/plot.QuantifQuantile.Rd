@@ -11,7 +11,7 @@
 
 \item{col.plot}{Vector of size \code{length(x$alpha)+1}. The first entry
 corresponds to the color of the data points while the other colors are for
-the conditional quantiles curves or points.}
+the conditional quantiles curves, points or surfaces.}
 
 \item{\dots}{Arguments to be passed to \code{\link{par}}.}
 }
@@ -59,16 +59,17 @@ X<-matrix(runif(d*n,-2,2),nr=d)
 Y<-apply(X^2,2,sum)+rnorm(n)
 res <- QuantifQuantile.d2(X,Y,testN=seq(80,150,by=10),x=as.matrix(c(1,0)),
 B=30,tildeB=20)
+plot(res)
 }
 }
 \references{
-Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-\emph{Conditional quantiles estimation through optimal quantization},
-Submitted.
+Charlier, I. and Paindaveine, D. and Saracco, J.,
+\emph{Conditional quantile estimation through optimal quantization},
+Journal of Statistical Planning and Inference, to appear.
 
-Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-\emph{Numerical study of a conditional quantile estimator based on optimal
-quantization}, Submitted.
+Charlier, I. and Paindaveine, D. and Saracco, J.,
+\emph{Conditional quantile estimator based on optimal
+quantization: from theory to practice}, Submitted.
 }
 \seealso{
 \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and

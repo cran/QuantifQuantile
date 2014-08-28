@@ -12,18 +12,18 @@
 #' \item The criterion for selecting the number of quantizers is implemented in 
 #' this function. The user has to choose a grid \code{testN} of possible values 
 #' in which \code{N} will be selected. It actually minimizes some bootstrap 
-#' estimated version of the MSE (Mean Squared Error). More precisely, for 
+#' estimated version of the ISE (Integrated Squared Error). More precisely, for 
 #' \code{N} fixed, it calculates the sum according to \code{alpha} of 
-#' \code{hatMSE_N} and then minimizes the resulting vector to get \code{N_opt}.
+#' \code{hatISE_N} and then minimizes the resulting vector to get \code{N_opt}.
 #'  However, the user can choose to select a different value of \code{N_opt} for
 #'  each \code{alpha} by setting \code{same_N=FALSE}. In this case, the vector 
-#'  \code{N_opt} is obtained by minimizing each column of \code{hatME_N} 
+#'  \code{N_opt} is obtained by minimizing each column of \code{hatISE_N} 
 #'  separately. The reason why \code{same_N=TRUE} by default is that taking 
-#'  \code{N_opt} according to \code{alpha} could provide crossing condtional 
-#'  quantile curves (rarely observed for not too close values of \code{alpha}. 
+#'  \code{N_opt} according to \code{alpha} could provide crossing conditional 
+#'  quantile curves (rarely observed for not too close values of \code{alpha}). 
 #'  The function \code{\link{plot.select.N.QuantifQuantile}} 
-#'  illustrates the selection of \code{N_opt}. If the graph is not globally convex, the arguments 
-#'  \code{testN} should be adapted.}
+#'  illustrates the selection of \code{N_opt}. If the graph is not decreasing 
+#'  then increasing, the argument \code{testN} should be adapted.}
 #'  
 #' @param X matrix of covariates.
 #' @param Y vector of response variables.
@@ -42,26 +42,26 @@
 #' quantiles. The number of columns is the number of considered values for \code{x} 
 #' and the number of rows the size of the order vector \code{alpha}.}
 #' @return \item{N_opt}{Optimal selected value for \code{N}. An integer if 
-#' \code{same_N}=TRUE and a vector of integers of length \code{length(alpha)} 
+#' \code{same_N=TRUE} and a vector of integers of length \code{length(alpha)} 
 #' otherwise.}
-#' @return \item{hatMSE_N}{The matrix of estimated MSE provided by our selection
+#' @return \item{hatISE_N}{The matrix of estimated ISE provided by our selection
 #'  criterion for \code{N} before taking the mean according to \code{alpha}. The
 #'   number of columns is then \code{length(testN)} and the number of rows 
 #'   \code{length(alpha)}.}
 #' @return \item{hatq_N}{A 3-dimensional array containing the estimated 
-#' conditional quantiles for each considered value for \code{N}.}
+#' conditional quantiles for each considered value for \code{alpha}, \code{x} and \code{N}.}
 #' @return \item{X}{The matrix of covariates.}
 #' @return \item{Y}{The vector of response variables.}
 #' @return \item{x}{The considered vector of values for \code{x} in q_alpha(x).}
 #' @return \item{alpha}{The considered vector of order for the quantiles.}
 #' @return \item{testN}{The considered grid of values for \code{N} that were tested.}
 
-#' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-#' \emph{Conditional quantiles estimation through optimal quantization}, 
-#' Submitted.
-#' @references Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-#' \emph{Numerical study of a conditional quantile estimator based on optimal 
-#' quantization}, Manuscript in preparation.
+#' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
+#' \emph{Conditional quantile estimation through optimal quantization}, 
+#' Journal of Statistical Planning and Inference, to appear.
+#' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
+#' \emph{Conditional quantile estimator based on optimal 
+#' quantization: from theory to practice}, Submitted.
 #' 
 #' @seealso \code{\link{QuantifQuantile}} and \code{\link{QuantifQuantile.d}} 
 #' for other dimensions.
@@ -77,8 +77,8 @@
 #' n <- 1000
 #' X <- matrix(runif(n*2,-2,2),ncol=n)
 #' Y <- apply(X^2,2,sum)+rnorm(n)
-#' res3 <- QuantifQuantile.d2(X,Y,testN=seq(90,140,by=10),B=20,tildeB=15)
-#' res4 <- QuantifQuantile.d2(X,Y,testN=seq(90,150,by=10),B=20,tildeB=15,same_N=FALSE)
+#' res <- QuantifQuantile.d2(X,Y,testN=seq(90,140,by=10),B=20,tildeB=15)
+#' res2 <- QuantifQuantile.d2(X,Y,testN=seq(90,150,by=10),B=20,tildeB=15,same_N=FALSE)
 #' }
 
 QuantifQuantile.d2 <- function(X, Y, alpha = c(0.05, 0.25, 0.5, 
@@ -118,8 +118,8 @@ QuantifQuantile.d2 <- function(X, Y, alpha = c(0.05, 0.25, 0.5,
     
     m <- length(x)/d  #number of vectors x for which we estimate q_alpha(x)
     
-    hatMSE_N <- array(0, dim = c(length(alpha), length(testN)))
-    hatq_N <- array(0, dim = c(m, length(alpha), length(testN)))
+    hatISE_N <- array(0, dim = c(length(alpha), length(testN)))
+    hatq_N <- array(0, dim = c(length(alpha), m, length(testN)))
 
     if (nrow(X) == n) 
         {
@@ -136,7 +136,7 @@ QuantifQuantile.d2 <- function(X, Y, alpha = c(0.05, 0.25, 0.5,
     for (jj in 1:length(testN)) {
         N <- testN[jj]
         
-        hatX <- choice.grid(X, N, B = B, tildeB = tildeB)$opti_grid
+        hatX <- choice.grid(X, N, ng = (B + tildeB) )$opti_grid
         
         # projection of the sample X on the B+tildeB optimal grids
         
@@ -231,45 +231,44 @@ QuantifQuantile.d2 <- function(X, Y, alpha = c(0.05, 0.25, 0.5,
             mean)
         
         i <- which(N == testN)
-        hatq_N[, , i] <- hatq
+        hatq_N[, , i] <- t(hatq)
         
-        # the last tilde B are used to estimate the MSE
+        # the last tilde B are used to estimate the ISE
         HATq <- array(rep(hatq, tildeB), dim = c(m, length(alpha), 
             tildeB))
-        hatMSE <- (HATq - Hatq[, , c((1 + B):(B + tildeB)), drop = FALSE])^2
-        hatMSE <- apply(hatMSE, 2, sum)/(m * tildeB)
-        hatMSE_N[, i] <- hatMSE
+        hatISE <- (HATq - Hatq[, , c((1 + B):(B + tildeB)), drop = FALSE])^2
+        hatISE <- apply(hatISE, 2, sum)/(m * tildeB)
+        hatISE_N[, i] <- hatISE
         
         print(N)
     }
     
     if(same_N){
       #choice of optimal N
-      hatMSEmean_N <- apply(hatMSE_N, 2, mean)
-      i_opt <- which.min(hatMSEmean_N)
-      #optimal value for N chosen as minimizing the sum of hatMSE for the 
+      hatISEmean_N <- apply(hatISE_N, 2, mean)
+      i_opt <- which.min(hatISEmean_N)
+      #optimal value for N chosen as minimizing the sum of hatISE for the 
       # different alpha's
       N_opt <- testN[i_opt]
       
       # table of the associated estimated conditional quantiles
       hatq_opt <- hatq_N[, , i_opt, drop = F]
-      hatq_opt <- matrix(hatq_opt, ncol = length(alpha))
-      hatq_opt <- t(hatq_opt)
+      hatq_opt <- matrix(hatq_opt, nrow = length(alpha))
     }else{
       #choice of optimal N
-      i_opt <- apply(hatMSE_N, 1, which.min)
-      #optimal value for N chosen as minimizing the sum of hatMSE for the 
+      i_opt <- apply(hatISE_N, 1, which.min)
+      #optimal value for N chosen as minimizing the sum of hatISE for the 
       # different alpha's
       N_opt <- testN[i_opt]
       # table of the associated estimated conditional quantiles
       hatq_opt <- array(0, dim = c(length(alpha), dim(x)[2]))
       for(i in 1:length(alpha)){
-        hatq_opt[i, ] <- hatq_N[,i , i_opt[i]]
+        hatq_opt[i, ] <- hatq_N[i, , i_opt[i]]
       }
     }
     
     output <- list(hatq_opt = hatq_opt, N_opt = N_opt, 
-        hatMSE_N = hatMSE_N, hatq_N = hatq_N, X = X, Y = Y, x = x, 
+        hatISE_N = hatISE_N, hatq_N = hatq_N, X = X, Y = Y, x = x, 
         alpha = alpha, testN = testN)
     class(output) <- "QuantifQuantile"
     output

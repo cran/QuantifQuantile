@@ -36,16 +36,16 @@ quantiles. The number of columns is the number of considered values for \code{x}
 and the number of rows the size of the order vector \code{alpha}.}
 
 \item{N_opt}{Optimal selected value for \code{N}. An integer if
-\code{same_N}=TRUE and a vector of integers of length \code{length(alpha)}
+\code{same_N=TRUE} and a vector of integers of length \code{length(alpha)}
 otherwise.}
 
-\item{hatMSE_N}{The matrix of estimated MSE provided by our selection
+\item{hatISE_N}{The matrix of estimated ISE provided by our selection
 criterion for \code{N} before taking the mean according to \code{alpha}. The
 number of columns is then \code{length(testN)} and the number of rows
 \code{length(alpha)}.}
 
 \item{hatq_N}{A 3-dimensional array containing the estimated
-conditional quantiles for each considered value for \code{N}.}
+conditional quantiles for each considered value for \code{alpha}, \code{x} and \code{N}.}
 
 \item{X}{The matrix of covariates.}
 
@@ -72,18 +72,18 @@ argument \code{x} must also have \code{d} rows.
 \item The criterion for selecting the number of quantizers is implemented in
 this function. The user has to choose a grid \code{testN} of possible values
 in which \code{N} will be selected. It actually minimizes some bootstrap
-estimated version of the MSE (Mean Squared Error). More precisely, for
+estimated version of the ISE (Integrated Squared Error). More precisely, for
 \code{N} fixed, it calculates the sum according to \code{alpha} of
-\code{hatMSE_N} and then minimizes the resulting vector to get \code{N_opt}.
+\code{hatISE_N} and then minimizes the resulting vector to get \code{N_opt}.
  However, the user can choose to select a different value of \code{N_opt} for
  each \code{alpha} by setting \code{same_N=FALSE}. In this case, the vector
- \code{N_opt} is obtained by minimizing each column of \code{hatME_N}
+ \code{N_opt} is obtained by minimizing each column of \code{hatISE_N}
  separately. The reason why \code{same_N=TRUE} by default is that taking
- \code{N_opt} according to \code{alpha} could provide crossing condtional
- quantile curves (rarely observed for not too close values of \code{alpha}.
+ \code{N_opt} according to \code{alpha} could provide crossing conditional
+ quantile curves (rarely observed for not too close values of \code{alpha}).
  The function \code{\link{plot.select.N.QuantifQuantile}}
- illustrates the selection of \code{N_opt}. If the graph is not globally convex, the arguments
- \code{testN} should be adapted.}
+ illustrates the selection of \code{N_opt}. If the graph is not decreasing
+ then increasing, the argument \code{testN} should be adapted.}
 }
 \examples{
 \dontrun{
@@ -106,13 +106,13 @@ res <- QuantifQuantile.d(X,Y,x,testN=seq(90,140,by=10),B=20,tildeB=15)
 }
 }
 \references{
-Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-\emph{Conditional quantiles estimation through optimal quantization},
-Submitted.
+Charlier, I. and Paindaveine, D. and Saracco, J.,
+\emph{Conditional quantile estimation through optimal quantization},
+Journal of Statistical Planning and Inference, to appear.
 
-Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-\emph{Numerical study of a conditional quantile estimator based on optimal
-quantization}, Manuscript in preparation.
+Charlier, I. and Paindaveine, D. and Saracco, J.,
+\emph{Conditional quantile estimator based on optimal
+quantization: from theory to practice}, Submitted.
 }
 \seealso{
 \code{\link{QuantifQuantile}} and \code{\link{QuantifQuantile.d2}}

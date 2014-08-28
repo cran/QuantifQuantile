@@ -2,13 +2,13 @@
 \name{plot.select.N.QuantifQuantile}
 \alias{plot.select.N}
 \alias{plot.select.N.QuantifQuantile}
-\title{Plot of estimated MSE as a function of N}
+\title{Plot of estimated ISE as a function of N}
 \usage{
 \method{plot.select.N}{QuantifQuantile}(x, type = "l", ...)
 }
 \arguments{
 \item{x}{An object of class \code{QuantifQuantile}, which is the result of
-\code{\link{QuantifQuantile}}.}
+\code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} or \code{\link{QuantifQuantile.d}}.}
 
 \item{type}{What type of plot should be drawn.}
 
@@ -16,8 +16,8 @@
 }
 \description{
 This function illustrates our data driven selection criterion
-for \code{N}. It provides the plot of the bootstrap estimated values of MSE(N)
-versus N.
+for \code{N}. It provides the plot of the bootstrap estimated values of
+integrated squared error ISE(N) versus N.
 }
 \details{
 This graph allows to adapt the choice of the grid for \code{N},
@@ -46,13 +46,13 @@ plot.select.N(res)
 }
 }
 \references{
-Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-\emph{Conditional quantiles estimation through optimal quantization},
-Submitted.
+Charlier, I. and Paindaveine, D. and Saracco, J.,
+\emph{Conditional quantile estimation through optimal quantization},
+Journal of Statistical Planning and Inference, to appear.
 
-Charlier, I. and Paindaveine, D. and Saracco, J. (2014),
-\emph{Numerical study of a conditional quantile estimator based on optimal
-quantization}, Manuscript in preparation.
+Charlier, I. and Paindaveine, D. and Saracco, J.,
+\emph{Conditional quantile estimator based on optimal
+quantization: from theory to practice}, Submitted.
 }
 \seealso{
 \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and
