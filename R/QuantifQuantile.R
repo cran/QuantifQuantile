@@ -20,7 +20,7 @@
 #'  separately. The reason why \code{same_N=TRUE} by default is that taking 
 #'  \code{N_opt} according to \code{alpha} could provide crossing conditional 
 #'  quantile curves (rarely observed for not too close values of \code{alpha}). 
-#'  The function \code{\link{plot.select.N.QuantifQuantile}} 
+#'  The function \code{\link{plot.QuantifQuantile}} 
 #'  illustrates the selection of \code{N_opt}. If the graph is not decreasing 
 #'  then increasing, the argument \code{testN} should be adapted.}
 #'
@@ -34,12 +34,15 @@
 #' @param tildeB number of bootstrap replications for the choice of \code{N}.
 #' @param same_N whether to use the same value of \code{N} for each \code{alpha}
 #' (\code{TRUE} by default).
+#' @param ncores number of cores to use. Default is set to the number of cores 
+#' detected by R minus 1.
 #' 
 #' @return An object of class \code{QuantifQuantile} which is a list with the 
 #' following components:
 #' @return \item{hatq_opt}{A matrix containing the estimated conditional 
 #' quantiles. The number of columns is the number of considered values for \code{x}
-#'  and the number of rows the size of the order vector \code{alpha}.}
+#'  and the number of rows the size of the order vector \code{alpha}. This object 
+#'  can also be returned using the usual \code{fitted.values} function.}
 #' @return \item{N_opt}{Optimal selected value for \code{N}. An integer if 
 #' \code{same_N=TRUE} and a vector of integers of length \code{length(alpha)} 
 #' otherwise.}
@@ -57,15 +60,13 @@
 
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
 #' \emph{Conditional quantile estimation through optimal quantization}, 
-#' Journal of Statistical Planning and Inference, to appear.
+#' Journal of Statistical Planning and Inference, 2015 (156), 14-30.
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
 #' \emph{Conditional quantile estimator based on optimal 
 #' quantization: from theory to practice}, Submitted.
 #' 
 #' @seealso \code{\link{QuantifQuantile.d2}} and \code{\link{QuantifQuantile.d}}
 #'  for multivariate versions.
-#' @seealso \code{\link{plot.select.N.QuantifQuantile}} for the \code{N} 
-#' selection criterion.
 #' @seealso \code{\link{plot.QuantifQuantile}}, 
 #' \code{\link{print.QuantifQuantile}}, \code{\link{summary.QuantifQuantile}}
 #' 
@@ -74,12 +75,14 @@
 #' n <- 300
 #' X <- runif(300,-2,2)
 #' Y <- X^2+rnorm(n)
-#' res <- QuantifQuantile(X,Y,testN=seq(10,30,by=5))
-#' res2 <- QuantifQuantile(X,Y,testN=seq(10,30,by=5),same_N=FALSE)
-#' 
+#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),ncores=2)
+#' \dontrun{
+#' res2 <- QuantifQuantile(X,Y,testN=seq(10,30,by=5),same_N=FALSE,ncores=2)
+#' }
+#' @import parallel
 QuantifQuantile <- function(X, Y, alpha = c(0.05, 0.25, 0.5, 
     0.75, 0.95), x = seq(min(X), max(X), length = 100), testN = c(35, 
-    40, 45, 50, 55), p = 2, B = 50, tildeB = 20, same_N=TRUE) {
+    40, 45, 50, 55), p = 2, B = 50, tildeB = 20, same_N=TRUE,ncores=detectCores()-1) {
     if (!is.numeric(X)) 
         stop("X must be numeric")
     if (!is.numeric(Y)) 
@@ -113,10 +116,7 @@ QuantifQuantile <- function(X, Y, alpha = c(0.05, 0.25, 0.5,
         nrow = (B + tildeB))
     
     #estimation for different values of N
-    
-    for (jj in 1:length(testN)) {
-        N <- testN[jj]
-        
+    calc_hatq_N <- function(N){    
         hatX <- choice.grid(X, N, ng = (B + tildeB))$opti_grid
         # projection of the sample X on the B+tildeB optimal grids
         projXboot <- array(0, dim = c(n, B + tildeB))
@@ -199,19 +199,22 @@ QuantifQuantile <- function(X, Y, alpha = c(0.05, 0.25, 0.5,
         hatq <- apply(Hatq[, , c(1:B), drop = FALSE], c(1, 2), 
             mean)
         
-        i <- which(N == testN)
-        hatq_N[, , i] <- t(hatq)
-        
         # the last tilde B are used to estimate the ISE
         HATq <- array(rep(hatq, tildeB), dim = c(length(x), length(alpha), 
             tildeB))
         hatISE <- (HATq - Hatq[, , c((1 + B):(B + tildeB)), drop = FALSE])^2
         hatISE <- apply(hatISE, 2, sum)/(length(x) * tildeB)
-        
-        hatISE_N[, i] <- hatISE
-        
+    
         print(N)
+        list(hatq=hatq,hatISE=hatISE)
     }
+  
+  parallel_hatq_hatISE <- mclapply(testN,calc_hatq_N,mc.cores = ncores,mc.set.seed=F)
+
+  for(i in 1:length(testN)){
+    hatq_N[,,i] <- t(parallel_hatq_hatISE[[i]]$hatq)
+    hatISE_N[,i] <- parallel_hatq_hatISE[[i]]$hatISE
+  }
     
     
     if(same_N){
@@ -238,7 +241,7 @@ QuantifQuantile <- function(X, Y, alpha = c(0.05, 0.25, 0.5,
       }
     }
     
-    output <- list(hatq_opt = hatq_opt, N_opt = N_opt, 
+    output <- list(fitted.values = hatq_opt,hatq_opt = hatq_opt, N_opt = N_opt, 
         hatISE_N = hatISE_N, hatq_N = hatq_N, X = X, Y = Y, x = x, 
         alpha = alpha, testN = testN)
     class(output) <- "QuantifQuantile"

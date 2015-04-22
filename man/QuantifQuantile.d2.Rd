@@ -7,7 +7,7 @@ QuantifQuantile.d2(X, Y, alpha = c(0.05, 0.25, 0.5, 0.75, 0.95),
   x = matrix(c(rep(seq(min(X[1, ]), max(X[1, ]), length = 20), 20),
   sort(rep(seq(min(X[2, ]), max(X[2, ]), length = 20), 20))), nrow = 2, byrow =
   TRUE), testN = c(110, 120, 130, 140, 150), p = 2, B = 50, tildeB = 20,
-  same_N = TRUE)
+  same_N = TRUE, ncores = detectCores() - 1)
 }
 \arguments{
 \item{X}{matrix of covariates.}
@@ -28,6 +28,9 @@ QuantifQuantile.d2(X, Y, alpha = c(0.05, 0.25, 0.5, 0.75, 0.95),
 
 \item{same_N}{whether to use the same value of \code{N} for each \code{alpha}
 (\code{TRUE} by default).}
+
+\item{ncores}{number of cores to use. Default is set to the number of cores
+detected by R minus 1.}
 }
 \value{
 An object of class \code{QuantifQuantile} which is a list with the
@@ -35,7 +38,8 @@ following components:
 
 \item{hatq_opt}{A matrix containing the estimated conditional
 quantiles. The number of columns is the number of considered values for \code{x}
-and the number of rows the size of the order vector \code{alpha}.}
+and the number of rows the size of the order vector \code{alpha}. This object
+ can also be returned using the usual \code{fitted.values} function.}
 
 \item{N_opt}{Optimal selected value for \code{N}. An integer if
 \code{same_N=TRUE} and a vector of integers of length \code{length(alpha)}
@@ -81,14 +85,14 @@ estimated version of the ISE (Integrated Squared Error). More precisely, for
  separately. The reason why \code{same_N=TRUE} by default is that taking
  \code{N_opt} according to \code{alpha} could provide crossing conditional
  quantile curves (rarely observed for not too close values of \code{alpha}).
- The function \code{\link{plot.select.N.QuantifQuantile}}
+ The function \code{\link{plot.QuantifQuantile}}
  illustrates the selection of \code{N_opt}. If the graph is not decreasing
  then increasing, the argument \code{testN} should be adapted.}
 }
 \examples{
 \dontrun{
-#(a few minuts to execute)
-set.seed(253664)
+#(a few seconds to execute)
+set.seed(164964)
 n <- 1000
 X <- matrix(runif(n*2,-2,2),ncol=n)
 Y <- apply(X^2,2,sum)+rnorm(n)
@@ -99,7 +103,7 @@ res2 <- QuantifQuantile.d2(X,Y,testN=seq(90,150,by=10),B=20,tildeB=15,same_N=FAL
 \references{
 Charlier, I. and Paindaveine, D. and Saracco, J.,
 \emph{Conditional quantile estimation through optimal quantization},
-Journal of Statistical Planning and Inference, to appear.
+Journal of Statistical Planning and Inference, 2015 (156), 14-30.
 
 Charlier, I. and Paindaveine, D. and Saracco, J.,
 \emph{Conditional quantile estimator based on optimal
@@ -108,9 +112,6 @@ quantization: from theory to practice}, Submitted.
 \seealso{
 \code{\link{QuantifQuantile}} and \code{\link{QuantifQuantile.d}}
 for other dimensions.
-
-\code{\link{plot.select.N.QuantifQuantile}} for the \code{N}
-selection criterion.
 
 \code{\link{plot.QuantifQuantile}},
 \code{\link{print.QuantifQuantile}}, \code{\link{summary.QuantifQuantile}}

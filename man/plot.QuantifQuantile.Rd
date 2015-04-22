@@ -3,7 +3,8 @@
 \alias{plot.QuantifQuantile}
 \title{Plot of estimated conditional quantiles using optimal quantization.}
 \usage{
-\method{plot}{QuantifQuantile}(x, col.plot = c(1:(length(x$alpha) + 1)), ...)
+\method{plot}{QuantifQuantile}(x, col.plot = c(1:(length(x$alpha) + 1)),
+  ise = FALSE, ...)
 }
 \arguments{
 \item{x}{An object of class \code{QuantifQuantile}, which is the result of
@@ -13,10 +14,16 @@
 corresponds to the color of the data points while the other colors are for
 the conditional quantiles curves, points or surfaces.}
 
+\item{ise}{Whether it plots the ISE curves in addition to the estimated
+quantile curves (if \code{ise=TRUE}, two different plots).}
+
 \item{\dots}{Arguments to be passed to \code{\link{par}}.}
 }
 \description{
-This function plots the estimated conditional quantiles.
+This function plots the estimated conditional quantiles by default.
+It can also illustrate our data driven selection criterion
+for \code{N} by providing the plot of the bootstrap estimated values of
+integrated squared error ISE(N) versus \code{N}.
 }
 \details{
 If \code{X} is univariate, the graph is two-dimensional and if
@@ -24,6 +31,11 @@ If \code{X} is univariate, the graph is two-dimensional and if
 package. When only one value for \code{x} is considered, estimated
 conditional quantiles are plotted as points. When \code{x} is a grid of
 values, they are plotted as curves if \code{d}=1 and surfaces if \code{d}=2.
+
+When \code{ise=TRUE}, the first plot allows to adapt the choice of the grid for \code{N},
+called \code{testN}. For example, if the curve is decreasing with \code{N}, it
+indicates that the values in \code{testN} are too small and the optimal
+\code{N} is larger.
 }
 \examples{
 #for a univariate X
@@ -31,41 +43,42 @@ set.seed(644936)
 n <- 300
 X <- runif(300,-2,2)
 Y <- X^2+rnorm(n)
-res <- QuantifQuantile(X,Y,testN=seq(10,30,by=5))
-plot(res)
+res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),ncores=2)
+plot(res,ise=TRUE)
 
+\dontrun{
 set.seed(92536)
 n <- 300
 X <- runif(300,-2,2)
 Y <- X^2+rnorm(n)
-res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),x=1)
-plot(res)
+res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),x=1,ncores=2)
+plot(res,ise=TRUE)
 
-\dontrun{
+
 #for a bivariate X
-#(a few minuts to execute)
+#(a few seconds to execute)
 set.seed(253664)
 d <- 2
 n <- 1000
 X<-matrix(runif(d*n,-2,2),nr=d)
 Y<-apply(X^2,2,sum)+rnorm(n)
 res <- QuantifQuantile.d2(X,Y,testN=seq(80,130,by=10),B=20,tildeB=15)
-plot(res)
+plot(res,ise=TRUE)
 
 set.seed(193854)
 d <- 2
 n <- 1000
 X<-matrix(runif(d*n,-2,2),nr=d)
 Y<-apply(X^2,2,sum)+rnorm(n)
-res <- QuantifQuantile.d2(X,Y,testN=seq(80,150,by=10),x=as.matrix(c(1,0)),
+res <- QuantifQuantile.d2(X,Y,testN=seq(110,140,by=10),x=as.matrix(c(1,0)),
 B=30,tildeB=20)
-plot(res)
+plot(res,ise=TRUE)
 }
 }
 \references{
 Charlier, I. and Paindaveine, D. and Saracco, J.,
 \emph{Conditional quantile estimation through optimal quantization},
-Journal of Statistical Planning and Inference, to appear.
+Journal of Statistical Planning and Inference, 2015 (156), 14-30.
 
 Charlier, I. and Paindaveine, D. and Saracco, J.,
 \emph{Conditional quantile estimator based on optimal

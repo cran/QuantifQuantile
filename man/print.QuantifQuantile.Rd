@@ -20,7 +20,7 @@ set.seed(644936)
 n <- 300
 X <- runif(300,-2,2)
 Y <- X^2+rnorm(n)
-res <- QuantifQuantile(X,Y,testN=seq(10,30,by=5))
+res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),ncores=2)
 print(res)
 }
 \author{
@@ -29,7 +29,7 @@ Isabelle Charlier, Davy Paindaveine, Jerome Saracco
 \references{
 Charlier, I. and Paindaveine, D. and Saracco, J.,
 \emph{Conditional quantile estimation through optimal quantization},
-Journal of Statistical Planning and Inference, to appear.
+Journal of Statistical Planning and Inference, 2015 (156), 14-30.
 
 Charlier, I. and Paindaveine, D. and Saracco, J.,
 \emph{Conditional quantile estimator based on optimal

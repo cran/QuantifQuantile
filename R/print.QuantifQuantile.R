@@ -1,34 +1,34 @@
-##' Print of QuantifQuantile results
-##'
-##' This function displays a small description of QuantifQuantile results.
-##' 
-##' @param x An object of class \code{QuantifQuantile}, which is the result of 
-##' the \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} or 
-##' \code{\link{QuantifQuantile.d}} functions.
-##' @param \dots Not used.
+#' Print of QuantifQuantile results
+#'
+#' This function displays a small description of QuantifQuantile results.
+#' 
+#' @param x An object of class \code{QuantifQuantile}, which is the result of 
+#' the \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} or 
+#' \code{\link{QuantifQuantile.d}} functions.
+#' @param \dots Not used.
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
 #' \emph{Conditional quantile estimation through optimal quantization}, 
-#' Journal of Statistical Planning and Inference, to appear.
+#' Journal of Statistical Planning and Inference, 2015 (156), 14-30.
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
 #' \emph{Conditional quantile estimator based on optimal 
 #' quantization: from theory to practice}, Submitted.
 
-##' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and
-##'  \code{\link{QuantifQuantile.d}}
-##' @seealso \code{\link{plot.QuantifQuantile}}, 
-##' \code{\link{summary.QuantifQuantile}}
-##' @author Isabelle Charlier, Davy Paindaveine, Jerome Saracco
-##' @examples
-##' set.seed(644936)
-##' n <- 300
-##' X <- runif(300,-2,2)
-##' Y <- X^2+rnorm(n)
-##' res <- QuantifQuantile(X,Y,testN=seq(10,30,by=5))
-##' print(res)
-##'
-##' @method print QuantifQuantile
-# @S3method print QuantifQuantile
-##' @export print.QuantifQuantile
+#' @seealso \code{\link{QuantifQuantile}}, \code{\link{QuantifQuantile.d2}} and
+#'  \code{\link{QuantifQuantile.d}}
+#' @seealso \code{\link{plot.QuantifQuantile}}, 
+#' \code{\link{summary.QuantifQuantile}}
+#' @author Isabelle Charlier, Davy Paindaveine, Jerome Saracco
+#' @examples
+#' set.seed(644936)
+#' n <- 300
+#' X <- runif(300,-2,2)
+#' Y <- X^2+rnorm(n)
+#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),ncores=2)
+#' print(res)
+#'
+#' @method print QuantifQuantile
+#' @S3method print QuantifQuantile
+#' @export print.QuantifQuantile
 print.QuantifQuantile <- function(x, ...) {
     stopifnot(class(x)=="QuantifQuantile")
     cat(paste("** QuantifQuantile results **", 

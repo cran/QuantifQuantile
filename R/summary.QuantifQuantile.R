@@ -3,7 +3,7 @@
 #' This function displays a summary of QuantifQuantile results.
 #' 
 #' This function prints the estimated conditional quantiles q_alpha(x) for each 
-#' \code{x} and \code{alpha} considered, as an array.
+#' \code{x} and \code{alpha} considered, as an array, and also the selected tuning parameter \code{N_opt}.
 #'
 #' @param object An object of class \code{QuantifQuantile}, which is the result 
 #' of the
@@ -13,7 +13,7 @@
 #'
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
 #' \emph{Conditional quantile estimation through optimal quantization}, 
-#' Journal of Statistical Planning and Inference, to appear.
+#' Journal of Statistical Planning and Inference, 2015 (156), 14-30.
 #' @references Charlier, I. and Paindaveine, D. and Saracco, J.,
 #' \emph{Conditional quantile estimator based on optimal 
 #' quantization: from theory to practice}, Submitted.
@@ -28,12 +28,12 @@
 #' n <- 300
 #' X <- runif(300,-2,2)
 #' Y <- X^2+rnorm(n)
-#' res <- QuantifQuantile(X,Y,testN=seq(10,30,by=5))
+#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),ncores=2)
 #' summary(res)
 #' 
 #'
 #' @method summary QuantifQuantile
-# @S3method summary QuantifQuantile
+#' @S3method summary QuantifQuantile
 #' @export summary.QuantifQuantile
 summary.QuantifQuantile <- function(object, ...) {
   stopifnot(class(object)=="QuantifQuantile")
