@@ -37,11 +37,11 @@
 #' 
 #' @examples
 #' #for a univariate X
-#' set.seed(644936)
+#' set.seed(644972)
 #' n <- 300
 #' X <- runif(300,-2,2)
 #' Y <- X^2+rnorm(n)
-#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),ncores=2)
+#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5))
 #' plot(res,ise=TRUE)
 #' 
 #' \dontrun{
@@ -49,7 +49,7 @@
 #' n <- 300
 #' X <- runif(300,-2,2)
 #' Y <- X^2+rnorm(n)
-#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),x=1,ncores=2)
+#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),x=1)
 #' plot(res,ise=TRUE)
 #' 
 #' 

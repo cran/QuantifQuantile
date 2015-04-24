@@ -19,11 +19,11 @@
 #' \code{\link{summary.QuantifQuantile}}
 #' @author Isabelle Charlier, Davy Paindaveine, Jerome Saracco
 #' @examples
-#' set.seed(644936)
+#' set.seed(644972)
 #' n <- 300
 #' X <- runif(300,-2,2)
 #' Y <- X^2+rnorm(n)
-#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5),ncores=2)
+#' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5))
 #' print(res)
 #'
 #' @method print QuantifQuantile

@@ -25,7 +25,12 @@
 #'  quantile curves (rarely observed for not too close values of \code{alpha}). 
 #'  The function \code{\link{plot.QuantifQuantile}} 
 #'  illustrates the selection of \code{N_opt}. If the graph is not decreasing 
-#'  then increasing, the argument \code{testN} should be adapted.}
+#'  then increasing, the argument \code{testN} should be adapted.
+#'  \item This function can use parallel computation to save time, by simply 
+#'  increasing the parameter \code{ncores}. Parallel computation relies on 
+#'  \code{\link{mclapply}} from \code{\link{parallel}} package, hence is not available
+#'  on Windows unless \code{ncores}=1 (default value).
+#'  }
 #'  
 #' @param X matrix of covariates.
 #' @param Y vector of response variables.
@@ -37,8 +42,7 @@
 #' @param tildeB number of bootstrap replications for the choice of \code{N}.
 #' @param same_N whether to use the same value of \code{N} for each \code{alpha}
 #' (\code{TRUE} by default).
-#' @param ncores number of cores to use. Default is set to the number of cores 
-#' detected by R minus 1.
+#' @param ncores number of cores to use. Default is set to 1 (see Details below).
 #' 
 #' @return An object of class \code{QuantifQuantile} which is a list with the 
 #' following components:
@@ -97,7 +101,7 @@
 
 QuantifQuantile.d <- function(X, Y, x, alpha = c(0.05, 0.25, 
     0.5, 0.75, 0.95), testN = c(35, 40, 45, 50, 55), p = 2, B = 50, 
-    tildeB = 20, same_N=TRUE,ncores=detectCores()-1) {
+    tildeB = 20, same_N=TRUE,ncores=1) {
     if (!is.numeric(X)) 
         stop("Y must be numeric")
     if (!is.numeric(x)) 
