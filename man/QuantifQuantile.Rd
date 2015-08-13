@@ -99,6 +99,12 @@ Y <- X^2+rnorm(n)
 res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5))
 \dontrun{
 res2 <- QuantifQuantile(X,Y,testN=seq(10,30,by=5),same_N=FALSE)
+
+data(gironde)
+X <- gironde[[1]]$middleemp
+Y <- gironde[[2]]$density
+set.seed(642536)
+res <- QuantifQuantile(X,Y,testN=seq(5,25,by=5))
 }
 }
 \references{

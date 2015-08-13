@@ -1,8 +1,8 @@
 Package: QuantifQuantile
 Type: Package
 Title: Estimation of Conditional Quantiles using Optimal Quantization
-Version: 2.1
-Date: 2015-04-24
+Version: 2.2
+Date: 2015-08-13
 Author: Isabelle Charlier and Davy Paindaveine and Jerome Saracco
 Maintainer: Isabelle Charlier <ischarli@ulb.ac.be>
 Description: Estimation of conditional quantiles using optimal quantization.
@@ -13,6 +13,6 @@ Description: Estimation of conditional quantiles using optimal quantization.
 License: GPL (>= 2.0)
 Depends: rgl, parallel
 NeedsCompilation: no
-Packaged: 2015-04-24 13:14:45 UTC; isabellecharlier
+Packaged: 2015-08-13 18:32:08 UTC; isabellecharlier
 Repository: CRAN
-Date/Publication: 2015-04-28 00:09:34
+Date/Publication: 2015-08-13 20:37:00

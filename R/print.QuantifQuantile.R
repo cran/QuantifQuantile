@@ -25,10 +25,9 @@
 #' Y <- X^2+rnorm(n)
 #' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5))
 #' print(res)
-#'
-#' @method print QuantifQuantile
-#' @S3method print QuantifQuantile
+#' 
 #' @export print.QuantifQuantile
+#' @S3method print QuantifQuantile
 print.QuantifQuantile <- function(x, ...) {
     stopifnot(class(x)=="QuantifQuantile")
     cat(paste("** QuantifQuantile results **", 

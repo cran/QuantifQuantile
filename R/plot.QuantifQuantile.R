@@ -1,4 +1,3 @@
-#' @export
 #' @title Plot of estimated conditional quantiles using optimal quantization.
 #' @name plot.QuantifQuantile
 #' @description This function plots the estimated conditional quantiles by default. 
@@ -73,8 +72,17 @@
 #' plot(res,ise=TRUE)
 #' }
 #' 
-#' @import rgl
-#' @method plot QuantifQuantile
+#' @importFrom rgl plot3d
+#' @importFrom rgl points3d
+#' @importFrom rgl surface3d
+#' @importFrom grDevices dev.new
+#' @importFrom graphics abline
+#' @importFrom graphics legend
+#' @importFrom graphics lines
+#' @importFrom graphics par
+#' @importFrom graphics plot
+#' @importFrom graphics points
+#' @export plot.QuantifQuantile
 #' @S3method plot QuantifQuantile
 
 plot.QuantifQuantile <- function(x, col.plot = c(1:(length(x$alpha) + 1)), ise=FALSE,...) {

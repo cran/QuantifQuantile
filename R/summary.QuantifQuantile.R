@@ -31,10 +31,8 @@
 #' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5))
 #' summary(res)
 #' 
-#'
-#' @method summary QuantifQuantile
-#' @S3method summary QuantifQuantile
 #' @export summary.QuantifQuantile
+#' @S3method summary QuantifQuantile
 summary.QuantifQuantile <- function(object, ...) {
   stopifnot(class(object)=="QuantifQuantile")
   if(length(object$N_opt)==1){

@@ -82,8 +82,16 @@
 #' res <- QuantifQuantile(X,Y,testN=seq(10,25,by=5))
 #' \dontrun{
 #' res2 <- QuantifQuantile(X,Y,testN=seq(10,30,by=5),same_N=FALSE)
+#' 
+#' data(gironde)
+#' X <- gironde[[1]]$middleemp
+#' Y <- gironde[[2]]$density
+#' set.seed(642536)
+#' res <- QuantifQuantile(X,Y,testN=seq(5,25,by=5))
 #' }
-#' @import parallel
+#' @importFrom parallel mclapply
+#' @importFrom parallel detectCores
+#' @importFrom stats quantile
 QuantifQuantile <- function(X, Y, alpha = c(0.05, 0.25, 0.5, 
     0.75, 0.95), x = seq(min(X), max(X), length = 100), testN = c(35, 
     40, 45, 50, 55), p = 2, B = 50, tildeB = 20, same_N=TRUE,ncores=1) {
@@ -244,7 +252,17 @@ QuantifQuantile <- function(X, Y, alpha = c(0.05, 0.25, 0.5,
         hatq_opt[i, ] <- hatq_N[i, , i_opt[i]]
       }
     }
-    
+  
+  if(length(N_opt)==1){
+    if(N_opt==min(testN)){warning("N_opt is on the left boundary of testN")}
+    if(N_opt==max(testN)){warning("N_opt is on the right boundary of testN")}
+  }else{
+    if(any(N_opt==min(testN))){warning(
+        "N_opt is on the left boundary of testN for at least one value of alpha")}
+    if(any(N_opt==max(testN))){warning(
+      "N_opt is on the right boundary of testN for at least one value of alpha")}
+  }
+  
     output <- list(fitted.values = hatq_opt,hatq_opt = hatq_opt, N_opt = N_opt, 
         hatISE_N = hatISE_N, hatq_N = hatq_N, X = X, Y = Y, x = x, 
         alpha = alpha, testN = testN)

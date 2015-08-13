@@ -85,7 +85,9 @@
 #' res <- QuantifQuantile.d2(X,Y,testN=seq(90,140,by=10),B=20,tildeB=15)
 #' res2 <- QuantifQuantile.d2(X,Y,testN=seq(90,150,by=10),B=20,tildeB=15,same_N=FALSE)
 #' }
-#' @import parallel
+#' @importFrom parallel mclapply
+#' @importFrom parallel detectCores
+#' @importFrom stats quantile
 
 QuantifQuantile.d2 <- function(X, Y, alpha = c(0.05, 0.25, 0.5, 
     0.75, 0.95), x = matrix(c(rep(seq(min(X[1, ]), max(X[1, ]), 
@@ -273,7 +275,17 @@ QuantifQuantile.d2 <- function(X, Y, alpha = c(0.05, 0.25, 0.5,
       for(i in 1:length(alpha)){
         hatq_opt[i, ] <- hatq_N[i, , i_opt[i]]
       }
-    }
+    }  
+    
+    if(length(N_opt)==1){
+      if(N_opt==min(testN)){warning("N_opt is on the left boundary of testN")}
+      if(N_opt==max(testN)){warning("N_opt is on the right boundary of testN")}
+    }else{
+      if(any(N_opt==min(testN))){warning(
+        "N_opt is on the left boundary of testN for at least one value of alpha")}
+      if(any(N_opt==max(testN))){warning(
+        "N_opt is on the right boundary of testN for at least one value of alpha")}
+    } 
     
     output <- list(fitted.values = hatq_opt,hatq_opt = hatq_opt, N_opt = N_opt, 
         hatISE_N = hatISE_N, hatq_N = hatq_N, X = X, Y = Y, x = x, 
